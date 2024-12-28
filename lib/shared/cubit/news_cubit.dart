@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/shared/components/constants.dart';
 import 'package:news_app/shared/theme/theme.dart';
 import '../../models/article_model.dart';
+import '../network/local/cache_helper.dart';
 import '../network/remote/dio_helper.dart';
 import 'news_state.dart';
 
@@ -97,16 +98,21 @@ class NewsCubit extends Cubit<NewsState> {
     });
   }
 
+
   ThemeData themeData = lightMode;
 
-  void changeAppMode () {
-    if (themeData == lightMode) {
-      themeData = darkMode;
+  void changeAppMode ({bool? fromShared}) {
+    if (fromShared != null) {
+      themeData = fromShared ? darkMode : lightMode;
       emit(ChangeAppMode());
     } else {
-      themeData = lightMode;
-      emit(ChangeAppMode());
+
+      bool isDark = themeData == lightMode;
+      themeData = isDark ? darkMode : lightMode;
+
+      CacheHelper.set(key: 'isDark', value: isDark).then((value) {
+        emit(ChangeAppMode());
+      });
     }
   }
-
 }

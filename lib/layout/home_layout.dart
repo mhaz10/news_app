@@ -79,6 +79,7 @@ class HomeLayout extends StatelessWidget {
                         itemCount: categoriesList.length,
                         itemBuilder: (context, index) => categoryItem(categoriesList[index], context)),
                     ),
+
                     ListView.separated(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
